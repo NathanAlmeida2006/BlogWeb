@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,7 +37,7 @@ public class PostController {
     @GetMapping("/newpost")
     public ModelAndView exibirFormularioNovoPost() {
         ModelAndView modelAndView = new ModelAndView("newpost");
-        modelAndView.addObject("post", new PostDTO(null, "", null, "", "", new ArrayList<>()));
+        modelAndView.addObject("post", new PostDTO(null, "", null, "", "", null));
         return modelAndView;
     }
 
@@ -48,9 +47,6 @@ public class PostController {
             return "newpost";
         }
         Post post = postConverter.toEntity(postDTO);
-        if (post.getId() == null) {
-            post.setId(UUID.randomUUID());
-        }
         postService.criarPost(post);
         redirectAttributes.addFlashAttribute("message", "Post criado com sucesso!");
         return "redirect:/posts";
@@ -59,9 +55,7 @@ public class PostController {
     @GetMapping("/posts")
     public ModelAndView listarTodosPosts() {
         List<Post> posts = postService.listarTodosPosts();
-        List<PostDTO> postsDTO = posts.stream()
-                .map(postConverter::toDTO)
-                .collect(Collectors.toList());
+        List<PostDTO> postsDTO = posts.stream().map(postConverter::toDTO).collect(Collectors.toList());
         ModelAndView modelAndView = new ModelAndView("posts");
         modelAndView.addObject("posts", postsDTO);
         return modelAndView;
@@ -71,7 +65,7 @@ public class PostController {
     public ModelAndView buscarPostPorId(@PathVariable UUID id) {
         try {
             Post post = postService.buscarPostPorId(id);
-            PostDTO postDTO = postConverter.toDTOWithComments(post);
+            PostDTO postDTO = postConverter.toDTO(post);
             ModelAndView modelAndView = new ModelAndView("post");
             modelAndView.addObject("post", postDTO);
             modelAndView.addObject("comentario", new ComentarioDTO(null, null, "", id));

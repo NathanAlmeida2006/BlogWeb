@@ -3,6 +3,7 @@ package dev.nathan.web.services.impls;
 import dev.nathan.web.models.Post;
 import dev.nathan.web.repositories.PostRepository;
 import dev.nathan.web.services.PostService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,14 +18,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post criarPost(Post post) {
-        return postRepository.save(post);
-    }
-
-    @Override
-    public Post buscarPostPorId(UUID id) {
-        return postRepository.findByIdWithComentarios(id)
-                .orElseThrow(() -> new RuntimeException("Post não encontrado"));
+    public void criarPost(Post post) {
+        postRepository.save(post);
     }
 
     @Override
@@ -33,19 +28,25 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post atualizarPost(UUID id, Post post) {
-        Post postExistente = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post não encontrado"));
-        postExistente.setAutor(post.getAutor());
-        postExistente.setTitulo(post.getTitulo());
-        postExistente.setTexto(post.getTexto());
-        return postRepository.save(postExistente);
+    public Post buscarPostPorId(UUID id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post com ID " + id + " não encontrado"));
+    }
+
+    @Override
+    public void atualizarPost(UUID id, Post post) {
+        Post existingPost = buscarPostPorId(id);
+        existingPost.setAutor(post.getAutor());
+        existingPost.setData(post.getData());
+        existingPost.setTitulo(post.getTitulo());
+        existingPost.setTexto(post.getTexto());
+        postRepository.save(existingPost);
     }
 
     @Override
     public void deletarPost(UUID id) {
         if (!postRepository.existsById(id)) {
-            throw new RuntimeException("Post não encontrado");
+            throw new EntityNotFoundException("Post com ID " + id + " não encontrado");
         }
         postRepository.deleteById(id);
     }

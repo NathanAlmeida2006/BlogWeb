@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PostService {
-    Post criarPost(Post post);
-
-    Post buscarPostPorId(UUID id);
+    void criarPost(Post post);
 
     List<Post> listarTodosPosts();
 
-    Post atualizarPost(UUID id, Post post);
+    Post buscarPostPorId(UUID id);
+
+    void atualizarPost(UUID id, Post post);
 
     void deletarPost(UUID id);
 }

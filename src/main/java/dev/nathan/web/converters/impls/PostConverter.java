@@ -6,7 +6,6 @@ import dev.nathan.web.models.Post;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -26,22 +25,9 @@ public class PostConverter implements Converter<Post, PostDTO> {
                 post.getData(),
                 post.getTitulo(),
                 post.getTexto(),
-                new ArrayList<>()
-        );
-    }
-
-    public PostDTO toDTOWithComments(Post post) {
-        return new PostDTO(
-                post.getId(),
-                post.getAutor(),
-                post.getData(),
-                post.getTitulo(),
-                post.getTexto(),
-                post.getComentarios() != null ?
-                        post.getComentarios().stream()
-                                .map(comentarioConverter::toDTO)
-                                .collect(Collectors.toList()) :
-                        new ArrayList<>()
+                post.getComentarios().stream()
+                        .map(comentarioConverter::toDTO)
+                        .collect(Collectors.toList())
         );
     }
 

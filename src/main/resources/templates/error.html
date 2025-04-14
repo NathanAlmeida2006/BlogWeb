@@ -2,23 +2,109 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Error | Web Blog</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { font-family: 'Poppins', sans-serif; background-color: #f8f9fa; }
-    .container { max-width: 600px; margin: 5rem auto; }
-    .alert { border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background-color: #ffffff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 15px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .navbar-brand {
+      font-size: 1.5rem;
+      color: #6366f1;
+      font-weight: 700;
+    }
+
+    .error-container {
+      max-width: 600px;
+      width: 100%;
+      background-color: white;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      margin: 2rem;
+    }
+
+    .error-icon {
+      font-size: 4rem;
+      color: #ef4444;
+      margin-bottom: 1.5rem;
+    }
+
+    .error-title {
+      color: #2d3748;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    .error-message {
+      font-size: 1.1rem;
+      color: #4a5568;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+      background-color: #6366f1;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #4f46e5;
+    }
   </style>
 </head>
 <body>
-<div class="container">
-  <div class="alert alert-danger">
-    <h4>Error</h4>
-    <p th:text="${message}"></p>
-    <a th:href="@{/posts}" class="btn btn-primary">Back to Posts</a>
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container">
+    <a class="navbar-brand" th:href="@{/posts}"><i class="fas fa-pen-fancy me-2"></i>Web Blog</a>
   </div>
+</nav>
+
+<div class="error-container">
+  <div class="error-icon">
+    <i class="fas fa-exclamation-circle"></i>
+  </div>
+  <h1 class="error-title">Oops! Algo deu errado</h1>
+  <p class="error-message" th:text="${message}"></p>
+  <a th:href="@{/posts}" class="btn btn-primary">
+    <i class="fas fa-home me-2"></i>Voltar para os Posts
+  </a>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

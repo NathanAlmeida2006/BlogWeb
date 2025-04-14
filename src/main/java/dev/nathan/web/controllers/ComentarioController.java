@@ -34,9 +34,6 @@ public class ComentarioController {
         try {
             Post post = postService.buscarPostPorId(id);
             Comentario comentario = comentarioConverter.toEntity(comentarioDTO, post);
-            if (comentario.getId() == null) {
-                comentario.setId(UUID.randomUUID());
-            }
             comentarioService.criarComentario(comentario);
             redirectAttributes.addFlashAttribute("message", "Comentário adicionado com sucesso!");
         } catch (RuntimeException e) {

@@ -17,7 +17,7 @@ public class ComentarioConverter implements Converter<Comentario, ComentarioDTO>
                 comentario.getId(),
                 comentario.getData(),
                 comentario.getComentario(),
-                comentario.getPost() != null ? comentario.getPost().getId() : null
+                comentario.getPost().getId()
         );
     }
 
