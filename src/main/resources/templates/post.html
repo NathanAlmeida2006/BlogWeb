@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${post.titulo} + ' | Web Blog'">Post | Web Blog</title>
+    <title th:text="${post.titulo} + ' | Blog Web'">Postagem | Blog Web</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -250,14 +250,14 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
-        <a class="navbar-brand" th:href="@{/posts}"><i class="fas fa-pen-fancy me-2"></i>Web Blog</a>
+        <a class="navbar-brand" th:href="@{/posts}"><i class="fas fa-pen-fancy me-2"></i>Blog Web</a>
     </div>
 </nav>
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/posts}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page" th:text="${post.titulo}">Post Title</li>
+            <li class="breadcrumb-item"><a th:href="@{/posts}">Início</a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="${post.titulo}">Título da Postagem</li>
         </ol>
     </nav>
 
@@ -274,20 +274,20 @@
             </div>
             <div class="post-meta-item">
                 <i class="fas fa-calendar"></i>
-                <span th:utext="${#temporals.format(post.data, 'MMM dd, yyyy HH:mm')}"></span>
+                <span th:utext="${#temporals.format(post.data, 'dd MMM, yyyy HH:mm')}"></span>
             </div>
         </div>
         <div class="post-content" th:utext="${post.texto}"></div>
         <div class="post-actions">
             <a th:href="@{/posts}" class="btn btn-primary">
-                <i class="fas fa-arrow-left"></i>Back to Posts
+                <i class="fas fa-arrow-left"></i>Voltar às Postagens
             </a>
             <div>
                 <a th:href="@{/posts/edit/{id}(id=${post.id})}" class="btn btn-warning">
-                    <i class="fas fa-edit"></i>Edit
+                    <i class="fas fa-edit"></i>Editar
                 </a>
                 <a th:href="@{/posts/delete/{id}(id=${post.id})}" class="btn btn-danger">
-                    <i class="fas fa-trash"></i>Delete
+                    <i class="fas fa-trash"></i>Excluir
                 </a>
             </div>
         </div>
@@ -296,7 +296,7 @@
     <div class="comments-section">
         <div class="comments-header">
             <h2 class="comments-title">
-                <i class="fas fa-comments"></i>Comments
+                <i class="fas fa-comments"></i>Comentários
                 <span class="comments-count" th:text="${post.comentarios != null ? post.comentarios.size() : '0'}">0</span>
             </h2>
         </div>
@@ -305,15 +305,15 @@
             <div th:each="comment : ${post.comentarios}" class="comment">
                 <div class="comment-meta">
                     <i class="fas fa-calendar"></i>
-                    <span th:utext="${#temporals.format(comment.data, 'MMM dd, yyyy HH:mm')}"></span>
+                    <span th:utext="${#temporals.format(comment.data, 'dd MMM, yyyy HH:mm')}"></span>
                 </div>
                 <div class="comment-content" th:text="${comment.comentario}"></div>
                 <div class="comment-actions">
                     <a th:href="@{/comments/edit/{id}(id=${comment.id})}" class="btn btn-warning btn-sm">
-                        <i class="fas fa-edit"></i>Edit
+                        <i class="fas fa-edit"></i>Editar
                     </a>
                     <a th:href="@{/comments/delete/{id}(id=${comment.id})}" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i>Delete
+                        <i class="fas fa-trash"></i>Excluir
                     </a>
                 </div>
             </div>
@@ -321,21 +321,21 @@
 
         <div th:unless="${post.comentarios != null and !post.comentarios.isEmpty()}" class="empty-comments">
             <i class="far fa-comment-dots"></i>
-            <p>No comments yet. Be the first to comment!</p>
+            <p>Ainda não há comentários. Seja o primeiro a comentar!</p>
         </div>
 
         <div class="form-container">
             <form th:action="@{/posts/{id}/comments(id=${post.id})}" th:object="${comentario}" method="post">
                 <div class="mb-3">
                     <label for="comentario" class="form-label">
-                        <i class="fas fa-pen"></i>Add a Comment
+                        <i class="fas fa-pen"></i>Adicionar um Comentário
                     </label>
-                    <textarea class="form-control" id="comentario" th:field="*{comentario}" rows="4" required placeholder="Share your thoughts..."></textarea>
+                    <textarea class="form-control" id="comentario" th:field="*{comentario}" rows="4" required placeholder="Compartilhe suas ideias..."></textarea>
                     <div class="text-danger" th:if="${#fields.hasErrors('comentario')}" th:errors="*{comentario}"></div>
                 </div>
                 <div class="text-end">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-comment"></i>Post Comment
+                        <i class="fas fa-comment"></i>Publicar Comentário
                     </button>
                 </div>
             </form>

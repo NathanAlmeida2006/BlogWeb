@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Posts | Web Blog</title>
+  <title>Postagens | Blog Web</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -198,13 +198,13 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light">
   <div class="container">
-    <a class="navbar-brand" th:href="@{/posts}"><i class="fas fa-pen-fancy me-2"></i>Web Blog</a>
+    <a class="navbar-brand" th:href="@{/posts}"><i class="fas fa-pen-fancy me-2"></i>Blog Web</a>
   </div>
 </nav>
 <div class="container">
   <div class="header-container">
-    <h1 class="page-title">All Posts</h1>
-    <p class="page-subtitle">Discover interesting articles and share your thoughts with our community</p>
+    <h1 class="page-title">Todas as Postagens</h1>
+    <p class="page-subtitle">Descubra artigos interessantes e compartilhe suas ideias com nossa comunidade</p>
   </div>
 
   <div th:if="${message}" class="alert" th:classappend="${message.contains('Erro') ? 'alert-danger' : 'alert-success'}">
@@ -213,7 +213,7 @@
 
   <div class="action-bar">
     <a th:href="@{/newpost}" class="btn btn-success new-post-btn">
-      <i class="fas fa-plus"></i>Create New Post
+      <i class="fas fa-plus"></i>Criar Nova Postagem
     </a>
   </div>
 
@@ -223,21 +223,21 @@
     </h2>
     <div class="post-meta">
       <span class="post-meta-item"><i class="fas fa-user"></i><span th:text="${post.autor}"></span></span>
-      <span class="post-meta-item"><i class="fas fa-calendar"></i><span th:utext="${#temporals.format(post.data, 'MMM dd, yyyy HH:mm')}"></span></span>
+      <span class="post-meta-item"><i class="fas fa-calendar"></i><span th:utext="${#temporals.format(post.data, 'dd MMM, yyyy HH:mm')}"></span></span>
     </div>
     <div class="post-excerpt">
       <span th:utext="${post.texto.length() > 200 ? post.texto.substring(0, 200) + '...' : post.texto}"></span>
     </div>
     <div class="d-flex justify-content-between">
       <a th:href="@{/posts/{id}(id=${post.id})}" class="btn btn-primary">
-        <i class="fas fa-eye"></i>Read More
+        <i class="fas fa-eye"></i>Ler Mais
       </a>
       <div class="post-actions">
         <a th:href="@{/posts/edit/{id}(id=${post.id})}" class="btn btn-warning">
-          <i class="fas fa-edit"></i>Edit
+          <i class="fas fa-edit"></i>Editar
         </a>
         <a th:href="@{/posts/delete/{id}(id=${post.id})}" class="btn btn-danger">
-          <i class="fas fa-trash"></i>Delete
+          <i class="fas fa-trash"></i>Excluir
         </a>
       </div>
     </div>
@@ -245,10 +245,10 @@
 
   <div th:unless="${posts}" class="empty-state">
     <i class="fas fa-clipboard"></i>
-    <h3>No posts available</h3>
-    <p>Be the first to share your thoughts with the community</p>
+    <h3>Nenhuma postagem disponível</h3>
+    <p>Seja o primeiro a compartilhar suas ideias com a comunidade</p>
     <a th:href="@{/newpost}" class="btn btn-success">
-      <i class="fas fa-plus me-2"></i>Create New Post
+      <i class="fas fa-plus me-2"></i>Criar Nova Postagem
     </a>
   </div>
 </div>

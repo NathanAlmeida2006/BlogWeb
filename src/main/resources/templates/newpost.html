@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Post | Web Blog</title>
+    <title>Nova Postagem | Blog Web</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -98,7 +98,7 @@
             border-radius: 12px;
             font-weight: 600;
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
         .btn:hover {
             transform: translateY(-3px);
@@ -164,42 +164,7 @@
             margin-top: 0.5rem;
             padding-left: 5px;
         }
-        .note-editor.note-frame {
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
-            transition: all 0.3s ease;
-        }
-        .note-editor.note-frame:focus-within {
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-            border-color: #6366f1;
-        }
-        .note-editor.note-frame .note-statusbar {
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
-            background-color: #f8fafc;
-        }
-        .note-editor.note-frame .note-editing-area .note-editable {
-            padding: 16px 20px;
-            color: #333;
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.7;
-        }
-        .note-toolbar {
-            background-color: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 10px;
-        }
-        .note-btn-group .note-btn {
-            border-radius: 6px;
-            margin: 2px;
-            padding: 5px 10px;
-            transition: all 0.2s ease;
-        }
-        .note-btn-group .note-btn:hover {
-            background-color: #e5e7eb;
-        }
+
         @media (max-width: 768px) {
             .form-container {
                 padding: 2rem;
@@ -221,44 +186,44 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
-        <a class="navbar-brand" th:href="@{/posts}"><i class="fas fa-pen-fancy me-2"></i>Web Blog</a>
+        <a class="navbar-brand" th:href="@{/posts}"><i class="fas fa-pen-fancy me-2"></i>Blog Web</a>
     </div>
 </nav>
 <div class="container">
     <div class="form-container">
-        <h2 class="form-title">Create a New Post</h2>
+        <h2 class="form-title">Criar uma Nova Postagem</h2>
         <form th:action="@{/newpost}" th:object="${post}" method="post">
             <div class="mb-4">
-                <label for="autor" class="form-label"><i class="fas fa-user-edit"></i>Author</label>
+                <label for="autor" class="form-label"><i class="fas fa-user-edit"></i>Autor</label>
                 <div class="input-icon">
-                    <input type="text" class="form-control" id="autor" th:field="*{autor}" required placeholder="Your name">
+                    <input type="text" class="form-control" id="autor" th:field="*{autor}" required placeholder="Seu nome">
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="text-danger" th:if="${#fields.hasErrors('autor')}" th:errors="*{autor}"></div>
             </div>
             <div class="mb-4">
-                <label for="titulo" class="form-label"><i class="fas fa-heading"></i>Title</label>
+                <label for="titulo" class="form-label"><i class="fas fa-heading"></i>Título</label>
                 <div class="input-icon">
-                    <input type="text" class="form-control" id="titulo" th:field="*{titulo}" required placeholder="Enter a catchy title">
+                    <input type="text" class="form-control" id="titulo" th:field="*{titulo}" required placeholder="Digite um título atraente">
                     <i class="fas fa-quote-right"></i>
                 </div>
                 <div class="text-danger" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
             </div>
             <div class="mb-4">
-                <label for="texto" class="form-label"><i class="fas fa-align-left"></i>Content</label>
-                <textarea class="form-control" id="texto" th:field="*{texto}" rows="10" required placeholder="Write your post content here..."></textarea>
+                <label for="texto" class="form-label"><i class="fas fa-align-left"></i>Conteúdo</label>
+                <textarea class="form-control" id="texto" th:field="*{texto}" rows="10" required placeholder="Escreva o conteúdo da sua postagem aqui..."></textarea>
                 <div class="text-danger" th:if="${#fields.hasErrors('texto')}" th:errors="*{texto}"></div>
                 <div class="form-text text-muted mt-2">
                     <i class="fas fa-lightbulb me-2"></i>
-                    Express your thoughts in detail. Good content engages readers and improves your blog's visibility.
+                    Expresse seus pensamentos em detalhes. Um bom conteúdo engaja os leitores e melhora a visibilidade do seu blog.
                 </div>
             </div>
             <div class="form-footer">
                 <a th:href="@{/posts}" class="btn btn-cancel">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Posts
+                    <i class="fas fa-arrow-left me-2"></i>Voltar às Postagens
                 </a>
                 <button type="submit" class="btn btn-submit">
-                    <i class="fas fa-paper-plane me-2"></i>Publish Post
+                    <i class="fas fa-paper-plane me-2"></i>Publicar Postagem
                 </button>
             </div>
         </form>
@@ -281,7 +246,7 @@
                 ['insert', ['link', 'picture', 'video']],
                 ['view', ['fullscreen', 'codeview', 'help']]
             ],
-            placeholder: 'Write your post content here...'
+            placeholder: 'Escreva o conteúdo da sua postagem aqui...'
         });
     });
 </script>
