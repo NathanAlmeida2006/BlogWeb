@@ -11,7 +11,6 @@ import java.util.UUID;
 
 @Service
 public class ComentarioServiceImpl implements ComentarioService {
-
     private final ComentarioRepository comentarioRepository;
 
     public ComentarioServiceImpl(ComentarioRepository comentarioRepository) {
@@ -45,6 +44,9 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     @Override
     public void deletarComentario(UUID id) {
+        if (!comentarioRepository.existsById(id)) {
+            throw new RuntimeException("Comentário não encontrado");
+        }
         comentarioRepository.deleteById(id);
     }
 }

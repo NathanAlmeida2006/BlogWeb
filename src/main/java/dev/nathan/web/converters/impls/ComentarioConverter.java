@@ -4,18 +4,13 @@ import dev.nathan.web.converters.Converter;
 import dev.nathan.web.dtos.ComentarioDTO;
 import dev.nathan.web.models.Comentario;
 import dev.nathan.web.models.Post;
-import dev.nathan.web.repositories.PostRepository;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Component
 public class ComentarioConverter implements Converter<Comentario, ComentarioDTO> {
-
-    private final PostRepository postRepository;
-
-    public ComentarioConverter(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
-
     @Override
     public ComentarioDTO toDTO(Comentario comentario) {
         return new ComentarioDTO(
@@ -29,15 +24,15 @@ public class ComentarioConverter implements Converter<Comentario, ComentarioDTO>
     @Override
     public Comentario toEntity(ComentarioDTO comentarioDTO) {
         Comentario comentario = new Comentario();
-        comentario.setId(comentarioDTO.id());
+        comentario.setId(comentarioDTO.id() != null ? comentarioDTO.id() : UUID.randomUUID());
+        comentario.setData(comentarioDTO.data() != null ? comentarioDTO.data() : LocalDateTime.now());
         comentario.setComentario(comentarioDTO.comentario());
+        return comentario;
+    }
 
-        if (comentarioDTO.postId() != null) {
-            Post post = postRepository.findById(comentarioDTO.postId())
-                    .orElseThrow(() -> new RuntimeException("Post não encontrado"));
-            comentario.setPost(post);
-        }
-
+    public Comentario toEntity(ComentarioDTO comentarioDTO, Post post) {
+        Comentario comentario = toEntity(comentarioDTO);
+        comentario.setPost(post);
         return comentario;
     }
 }

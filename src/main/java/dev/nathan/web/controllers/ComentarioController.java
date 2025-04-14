@@ -2,78 +2,91 @@ package dev.nathan.web.controllers;
 
 import dev.nathan.web.dtos.ComentarioDTO;
 import dev.nathan.web.models.Comentario;
+import dev.nathan.web.models.Post;
 import dev.nathan.web.services.ComentarioService;
+import dev.nathan.web.services.PostService;
 import dev.nathan.web.converters.impls.ComentarioConverter;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/api/comentarios")
 public class ComentarioController {
-
     private final ComentarioService comentarioService;
+    private final PostService postService;
     private final ComentarioConverter comentarioConverter;
 
-    public ComentarioController(ComentarioService comentarioService, ComentarioConverter comentarioConverter) {
+    public ComentarioController(ComentarioService comentarioService, PostService postService, ComentarioConverter comentarioConverter) {
         this.comentarioService = comentarioService;
+        this.postService = postService;
         this.comentarioConverter = comentarioConverter;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView criarComentario(@RequestBody ComentarioDTO comentarioDTO) {
-        Comentario comentario = comentarioConverter.toEntity(comentarioDTO);
-        Comentario comentarioSalvo = comentarioService.criarComentario(comentario);
-        ComentarioDTO comentarioSalvoDTO = comentarioConverter.toDTO(comentarioSalvo);
-
-        ModelAndView modelAndView = new ModelAndView("comentario-detalhes"); // Nome da view
-        modelAndView.addObject("comentario", comentarioSalvoDTO);
-        modelAndView.setStatus(HttpStatus.CREATED);
-        return modelAndView;
+    @PostMapping("/posts/{id}/comments")
+    public String criarComentario(@PathVariable UUID id, @Valid @ModelAttribute ComentarioDTO comentarioDTO, RedirectAttributes redirectAttributes) {
+        try {
+            Post post = postService.buscarPostPorId(id);
+            Comentario comentario = comentarioConverter.toEntity(comentarioDTO, post);
+            if (comentario.getId() == null) {
+                comentario.setId(UUID.randomUUID());
+            }
+            comentarioService.criarComentario(comentario);
+            redirectAttributes.addFlashAttribute("message", "Comentário adicionado com sucesso!");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("message", "Erro ao adicionar comentário: " + e.getMessage());
+        }
+        return "redirect:/posts/" + id;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ModelAndView buscarComentarioPorId(@PathVariable UUID id) {
-        Comentario comentario = comentarioService.buscarComentarioPorId(id);
-        ComentarioDTO comentarioDTO = comentarioConverter.toDTO(comentario);
-
-        ModelAndView modelAndView = new ModelAndView("comentario-detalhes"); // Nome da view
-        modelAndView.addObject("comentario", comentarioDTO);
-        return modelAndView;
+    @GetMapping("/comments/edit/{id}")
+    public ModelAndView exibirFormularioEditarComentario(@PathVariable UUID id) {
+        try {
+            Comentario comentario = comentarioService.buscarComentarioPorId(id);
+            ComentarioDTO comentarioDTO = comentarioConverter.toDTO(comentario);
+            ModelAndView modelAndView = new ModelAndView("editcomment");
+            modelAndView.addObject("comentario", comentarioDTO);
+            return modelAndView;
+        } catch (RuntimeException e) {
+            ModelAndView modelAndView = new ModelAndView("posts");
+            modelAndView.addObject("message", "Comentário não encontrado");
+            return modelAndView;
+        }
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView listarTodosComentarios() {
-        List<Comentario> comentarios = comentarioService.listarTodosComentarios();
-        List<ComentarioDTO> comentariosDTO = comentarios.stream()
-                .map(comentarioConverter::toDTO)
-                .collect(Collectors.toList());
-
-        ModelAndView modelAndView = new ModelAndView("lista-comentarios"); // Nome da view
-        modelAndView.addObject("comentarios", comentariosDTO);
-        return modelAndView;
+    @PostMapping("/comments/edit/{id}")
+    public String atualizarComentario(@PathVariable UUID id, @Valid @ModelAttribute ComentarioDTO comentarioDTO, RedirectAttributes redirectAttributes) {
+        try {
+            Comentario comentario = comentarioConverter.toEntity(comentarioDTO);
+            comentario.setId(id);
+            Comentario existingComentario = comentarioService.buscarComentarioPorId(id);
+            comentario.setPost(existingComentario.getPost());
+            comentarioService.atualizarComentario(id, comentario);
+            redirectAttributes.addFlashAttribute("message", "Comentário atualizado com sucesso!");
+            return "redirect:/posts/" + existingComentario.getPost().getId();
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("message", "Erro ao atualizar comentário: " + e.getMessage());
+            return "redirect:/posts";
+        }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ModelAndView atualizarComentario(@PathVariable UUID id, @RequestBody ComentarioDTO comentarioDTO) {
-        Comentario comentario = comentarioConverter.toEntity(comentarioDTO);
-        Comentario comentarioAtualizado = comentarioService.atualizarComentario(id, comentario);
-        ComentarioDTO comentarioAtualizadoDTO = comentarioConverter.toDTO(comentarioAtualizado);
-
-        ModelAndView modelAndView = new ModelAndView("comentario-detalhes"); // Nome da view
-        modelAndView.addObject("comentario", comentarioAtualizadoDTO);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ModelAndView deletarComentario(@PathVariable UUID id) {
-        comentarioService.deletarComentario(id);
-
-        return new ModelAndView("redirect:/api/comentarios");
+    @GetMapping("/comments/delete/{id}")
+    public String deletarComentario(@PathVariable UUID id, RedirectAttributes redirectAttributes) {
+        try {
+            Comentario comentario = comentarioService.buscarComentarioPorId(id);
+            UUID postId = comentario.getPost().getId();
+            comentarioService.deletarComentario(id);
+            redirectAttributes.addFlashAttribute("message", "Comentário deletado com sucesso!");
+            return "redirect:/posts/" + postId;
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("message", "Erro ao deletar comentário: " + e.getMessage());
+            return "redirect:/posts";
+        }
     }
 }

@@ -1,6 +1,12 @@
 package dev.nathan.web.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,25 +14,24 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table (name = "post")
+@Table(name = "post")
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
-    @Column(nullable = false, length = 70)
+    @Column(length = 100, nullable = false)
     private String autor;
 
-    @Column(nullable = false, length = 70)
-    private final LocalDateTime data = LocalDateTime.now();
+    @Column
+    private LocalDateTime data = LocalDateTime.now();
 
-    @Column(nullable = false, length = 70)
+    @Column(length = 200, nullable = false)
     private String titulo;
 
-    @Lob
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String texto;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comentario> comentarios = new ArrayList<>();
 
     public UUID getId() {
@@ -47,6 +52,10 @@ public class Post {
 
     public LocalDateTime getData() {
         return data;
+    }
+
+    public void setData(LocalDateTime data) {
+        this.data = data;
     }
 
     public String getTitulo() {

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Post | Web Blog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 15px 0;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            color: #6366f1;
+            font-weight: 700;
+        }
+        .form-container {
+            max-width: 750px;
+            margin: 3rem auto;
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+        .form-title {
+            color: #2d3748;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+            position: relative;
+        }
+        .form-title:after {
+            content: "";
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #6366f1;
+            margin: 10px auto;
+        }
+        .form-label {
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+        .form-control {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        textarea.form-control {
+            min-height: 200px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-submit {
+            background-color: #6366f1;
+            border: none;
+            color: white;
+        }
+        .btn-submit:hover {
+            background-color: #4f46e5;
+        }
+        .btn-cancel {
+            background-color: #e2e8f0;
+            border: none;
+            color: #4a5568;
+        }
+        .btn-cancel:hover {
+            background-color: #cbd5e0;
+        }
+        .input-icon {
+            position: relative;
+        }
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+        }
+        .input-icon input {
+            padding-left: 40px;
+        }
+        .form-footer {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        .note-editor.note-frame {
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .note-editor.note-frame .note-statusbar {
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .note-editor.note-frame .note-editing-area .note-editable {
+            padding: 12px 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/posts}"><i class="fas fa-pen-fancy me-2"></i>Web Blog</a>
+    </div>
+</nav>
+<div class="container">
+    <div class="form-container">
+        <h2 class="form-title">Create a New Post</h2>
+        <form th:action="@{/newpost}" th:object="${post}" method="post">
+            <div class="mb-4">
+                <label for="autor" class="form-label">Author</label>
+                <div class="input-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" class="form-control" id="autor" th:field="*{autor}" required placeholder="Your name">
+                </div>
+                <div class="text-danger" th:if="${#fields.hasErrors('autor')}" th:errors="*{autor}"></div>
+            </div>
+            <div class="mb-4">
+                <label for="titulo" class="form-label">Title</label>
+                <div class="input-icon">
+                    <i class="fas fa-heading"></i>
+                    <input type="text" class="form-control" id="titulo" th:field="*{titulo}" required placeholder="Enter a catchy title">
+                </div>
+                <div class="text-danger" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+            </div>
+            <div class="mb-4">
+                <label for="texto" class="form-label">Content</label>
+                <textarea class="form-control" id="texto" th:field="*{texto}" rows="10" required placeholder="Write your post content here..."></textarea>
+                <div class="text-danger" th:if="${#fields.hasErrors('texto')}" th:errors="*{texto}"></div>
+                <div class="form-text text-muted mt-2">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Express your thoughts in detail. Good content engages readers.
+                </div>
+            </div>
+            <div class="form-footer d-flex justify-content-between">
+                <a th:href="@{/posts}" class="btn btn-cancel">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </a>
+                <button type="submit" class="btn btn-submit">
+                    <i class="fas fa-paper-plane me-2"></i>Publish Post
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#texto').summernote({
+            height: 300,
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ],
+            placeholder: 'Write your post content here...'
+        });
+    });
+</script>
+</body>
+</html>

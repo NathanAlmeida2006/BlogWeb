@@ -1,22 +1,25 @@
 package dev.nathan.web.models;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
 @Entity
 @Table(name = "comentarios")
 public class Comentario {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
-    private final LocalDateTime data = LocalDateTime.now();
+    @Column
+    private LocalDateTime data = LocalDateTime.now();
 
-    @Column(nullable = false, length = 500)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String comentario;
 
     @ManyToOne
@@ -33,6 +36,10 @@ public class Comentario {
 
     public LocalDateTime getData() {
         return data;
+    }
+
+    public void setData(LocalDateTime data) {
+        this.data = data;
     }
 
     public String getComentario() {

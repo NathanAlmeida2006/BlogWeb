@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Error | Web Blog</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background-color: #f8f9fa; }
+    .container { max-width: 600px; margin: 5rem auto; }
+    .alert { border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="alert alert-danger">
+    <h4>Error</h4>
+    <p th:text="${message}"></p>
+    <a th:href="@{/posts}" class="btn btn-primary">Back to Posts</a>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Service
 public class PostServiceImpl implements PostService {
-
     private final PostRepository postRepository;
 
     public PostServiceImpl(PostRepository postRepository) {
@@ -24,7 +23,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post buscarPostPorId(UUID id) {
-        return postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post não encontrado"));
+        return postRepository.findByIdWithComentarios(id)
+                .orElseThrow(() -> new RuntimeException("Post não encontrado"));
     }
 
     @Override
@@ -34,7 +34,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post atualizarPost(UUID id, Post post) {
-        Post postExistente = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post não encontrado"));
+        Post postExistente = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post não encontrado"));
         postExistente.setAutor(post.getAutor());
         postExistente.setTitulo(post.getTitulo());
         postExistente.setTexto(post.getTexto());
@@ -43,6 +44,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deletarPost(UUID id) {
+        if (!postRepository.existsById(id)) {
+            throw new RuntimeException("Post não encontrado");
+        }
         postRepository.deleteById(id);
     }
 }
